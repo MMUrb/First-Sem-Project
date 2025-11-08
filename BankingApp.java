@@ -4,7 +4,7 @@ import java.text.DecimalFormat;
 public class BankingApp
 {
 
-    private static final object firstObject = null;
+    private static final Object firstOption = null;
     public static void main(String[] args)
     {
         DecimalFormat df = new DecimalFormat("#.00");
@@ -96,8 +96,9 @@ public class BankingApp
                     userName = scan.nextLine();
                     System.out.print("Choose a PIN: ");
                     PIN = scan.nextInt();
+                    double initialBalance = 0.00;
 
-                    if(user.createAccount(userName, PIN))
+                    if(user.createAccount(userName, PIN, initialBalance))
                     {
                         System.out.println("Account created successfully.");
                     }

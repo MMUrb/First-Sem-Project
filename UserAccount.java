@@ -4,7 +4,7 @@ public class UserAccount
     private int pin;
     private double balance;
 
-    public UserAccount(String username, int pin)
+    public UserAccount(String username, int pin, double initialBalance)
     {
         this.username = username;
         this.pin = pin;

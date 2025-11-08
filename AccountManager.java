@@ -1,10 +1,12 @@
 import java.util.ArrayList;
+import java.text.DecimalFormat;
 import java.io.*;
 
 public class AccountManager
 {
+    DecimalFormat df = new DecimalFormat("#0.00");
     private ArrayList<UserAccount> accounts;
-    private final String FILE_PATH = "C:/Users/Rahul/OneDrive - MMU/Digital Artefact/First Sem Project/AccountInfo.txt";
+    private final String FILE_PATH = "C:\\Users\\Rahul\\OneDrive - MMU\\Digital Artefact\\First Sem Project\\AccountInfo.txt";
 
     public AccountManager()
     {
@@ -50,22 +52,23 @@ public class AccountManager
     }
 
     public void displayAccounts()
+
     {
         if (accounts.isEmpty())
         {
-            System.out.println("No accounts found.");
+            System.out.println("\nNo accounts found.");
             return;
         }
 
         else
         {
-            System.out.println("Account created");
+            System.out.println("\nYour account has been created!");
 
             for (UserAccount account :accounts)
             {
-                System.out.println("Username: " + account.getUsername() +
-                                   "PIN: " + account.getPin() +
-                                   "Balance: $" + account.getBalance());
+                System.out.println("Username: " + account.getUsername() + " | " + 
+                                   "PIN: " + account.getPin() + " | " + 
+                                   "Balance: £" + df.format(account.getBalance()));
             }
         }
 
@@ -83,7 +86,7 @@ public class AccountManager
         return null;
     }
 
-    private void saveAccountsToFile()
+    protected void saveAccountsToFile()
     {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_PATH)))
         {

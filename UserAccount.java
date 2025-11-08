@@ -8,7 +8,7 @@ public class UserAccount
     {
         this.username = username;
         this.pin = pin;
-        this.balance = balance;
+        this.balance = initialBalance;
     }
 
     public String getUsername()

@@ -7,7 +7,7 @@ public class BankingApp
     private static final Object firstOption = null;
     public static void main(String[] args)
     {
-        DecimalFormat df = new DecimalFormat("#.00");
+        DecimalFormat df = new DecimalFormat("#0.00");
         AccountManager user = new AccountManager();
         Scanner scan = new Scanner(System.in);
 
@@ -23,7 +23,7 @@ public class BankingApp
                                "\n4 - Exit application" +
                                "\n9 - View all accounts");
             
-            System.out.print("\nWhat would you like to do?");
+            System.out.print("\nWhat would you like to do? ");
             mainMenu = scan.nextInt();
             scan.nextLine();
 
@@ -35,7 +35,7 @@ public class BankingApp
                 case 1:
                     System.out.print("\nEnter your username: ");
                     userName = scan.nextLine();
-                    System.out.print("\nEnter your PIN: ");
+                    System.out.print("Enter your PIN: ");
                     PIN = scan.nextInt();
 
                     UserAccount account = user.login(userName, PIN);
@@ -51,33 +51,35 @@ public class BankingApp
                                                "\n2 - Deposit Funds" + 
                                                "\n3 - Withdraw Funds" + 
                                                "\n4 - Logout");
-                            System.out.print("What would you like to do?");
+                            System.out.print("\nWhat would you like to do? ");
                             firstOption = scan.nextInt();
 
                             switch(firstOption)
                             {
                                 case 1:
-                                    System.out.println("Your balance is: $" + df.format(account.getBalance()));
+                                    System.out.println("Your balance is: £" + df.format(account.getBalance()));
                                     break;
 
                                 case 2:
-                                    System.out.print("Enter amount to deposit: $");
+                                    System.out.print("Enter amount to deposit: £");
                                     double depositAmount = scan.nextDouble();
                                     account.deposit(depositAmount);
-                                    System.out.println("Deposit successful. New balance: $" + df.format(account.getBalance()));
+                                    user.saveAccountsToFile();
+                                    System.out.println("Deposit successful. New balance: £" + df.format(account.getBalance()));
                                     break;
 
                                 case 3:
-                                    System.out.print("Enter amount to withdraw: $");
+                                    System.out.print("Enter amount to withdraw: £");
                                     double withdrawAmount = scan.nextDouble();
                                     if(account.withdraw(withdrawAmount))
                                     {
-                                        System.out.println("Withdrawal successful. New balance: $" + df.format(account.getBalance()));
+                                        System.out.println("Withdrawal successful. New balance: £" + df.format(account.getBalance()));
                                     }
                                     else
                                     {
                                         System.out.println("Insufficient funds or invalid amount.");
                                     }
+                                    user.saveAccountsToFile();
                                     break;
 
                                 case 4:

@@ -123,10 +123,10 @@ public class AccountManager
                     accounts.add(new UserAccount(username, pin, balance));
                 }
             }
+            
         }catch (IOException | NumberFormatException e)
         {
             System.out.println("Error loading accounts: " + e.getMessage());
         }
     }
-
 }    

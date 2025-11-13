@@ -4,7 +4,7 @@ import java.io.*;
 
 public class AccountManager
 {
-    DecimalFormat df = new DecimalFormat("#0.00");
+    DecimalFormat df = new DecimalFormat("#,###.00");
     private ArrayList<UserAccount> accounts;
     private final String FILE_PATH = "C:\\Users\\Rahul\\OneDrive - MMU\\Digital Artefact\\First Sem Project\\AccountInfo.txt";
 

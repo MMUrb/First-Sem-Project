@@ -5,7 +5,7 @@ public class InterestAccount extends UserAccount
 
     public InterestAccount(String username, int pin, double initialBalance, double interestRate)
     {
-        super(username, pin, initialBalance, "interest");
+        super(username, pin, initialBalance, "High Yield Interest");
 
         this.interestRate = interestRate;
     }

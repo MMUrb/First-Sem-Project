@@ -2,6 +2,8 @@
 // scanner is used to take the users input
 import java.text.DecimalFormat;
 import java.util.Scanner;
+import java.util.Timer;
+import java.util.TimerTask;
 
 // the main class that runs the banking app
 public class BankingApp
@@ -13,6 +15,33 @@ public class BankingApp
         DecimalFormat df = new DecimalFormat("#,###.00");
         // creates an AccountManager object that controls the account functions
         AccountManager user = new AccountManager();
+
+        Timer timer = new Timer(true);
+
+        timer.scheduleAtFixedRate(new TimerTask()
+        {
+            @Override
+            public void run()
+            {
+                for (UserAccount account : user.getAllAccounts())
+                {
+                    if (account instanceof InterestAccount interestAccount)
+                    {
+                        interestAccount.applyInterest();
+                        user.saveAccountsToFile();
+                    }
+                    else if (account instanceof IsaAccount isaAccount)
+                    {
+                        isaAccount.applyInterest();
+                        user.saveAccountsToFile();
+                    }
+                }
+            }
+            // interest is applied every 10 seconds to see the effect quickly
+            // delay of 0 means interest is applied immediately on starting the app
+        },0, 10000);
+
+
         // scanner object to take the users input
         Scanner scan = new Scanner(System.in);
 
@@ -59,6 +88,7 @@ public class BankingApp
                     // if the login is successful, the user can view their account
                     if (account != null)
                     {
+                        System.out.println("\nLogin successful. Welcome, " + account.getUsername() + "!");
                         // variable to store the users account menu choice
                         int firstOption;
 
@@ -109,6 +139,7 @@ public class BankingApp
                                     {
                                         System.out.println("Withdrawal successful. New balance: £" + df.format(account.getBalance()));
                                     }
+                                    // shows message if there are insufficient funds
                                     else
                                     {
                                         System.out.println("Insufficient funds or invalid amount.");
@@ -131,17 +162,25 @@ public class BankingApp
                         // continues the loop until the user chooses 4 to logout
                         } while(firstOption != 4);
                     }
+                    else
+                    {
+                        System.out.println("\nInvalid username or PIN. Please try again.");
+                    }
                     break;
 
                 // allows the user to create a new account
                 case 2:
+                    // asks the user to choose a username for their account
                     System.out.print("Choose a username: ");
                     userName = scan.nextLine();
 
+                    // asks the user to choose a pin for their account
                     System.out.print("Choose a PIN: ");
                     PIN = scan.nextInt();
+                    // clear the newline character from the input buffer
                     scan.nextLine();
 
+                    // variables for account creation
                     int accountOption;
                     String accountType = null;
                     double initialBalance = 0.00;
@@ -157,23 +196,25 @@ public class BankingApp
                                         "\n4 - Go Back");
 
                         System.out.print("\nWhich type of account would you like to create? ");
+                        // reads the users choice
                         accountOption = scan.nextInt();
 
+                        // handles the users account type choice
                         switch (accountOption)
                         {
                             case 1:
                                 System.out.println("Standard Account selected.");
-                                accountType = "regular";
+                                accountType = "Standard";
                                 break;
 
                             case 2:
                                 System.out.println("Interest Account selected.");
-                                accountType = "interest";
+                                accountType = "High Yield Interest";
                                 break;
 
                             case 3:
                                 System.out.println("ISA Account selected.");
-                                accountType = "isa";
+                                accountType = "Lifetime ISA";
                                 break;
 
                             case 4:

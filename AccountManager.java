@@ -2,6 +2,8 @@
 import java.io.*;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.concurrent.*;
+
 
 public class AccountManager
 {
@@ -12,6 +14,11 @@ public class AccountManager
     // arraylist to store multiple user accounts, accounts can also be added or removed from the list
     // used final so accounts cant be changed later in the code
     private final ArrayList<UserAccount> accounts = new ArrayList<>();
+
+    public ArrayList<UserAccount> getAllAccounts()
+    {
+        return accounts;
+    }
     
     // file path to store the account information
     // used final so FILE_PATH cant be changed later in the code
@@ -98,7 +105,7 @@ public class AccountManager
         // it displays any accounts found
         else
         {
-            System.out.println("\nYour account has been created!");
+            System.out.println("\nHere are the current accounts:");
 
             // loops through the accounts arraylist and displays each account's information
             for (UserAccount account : accounts)
@@ -128,6 +135,26 @@ public class AccountManager
         }
         // if they dont match, it returns nothing
         return null;
+    }
+
+    public void interestTimer()
+    {
+        ScheduledExecutorService scheduler = java.util.concurrent.Executors.newScheduledThreadPool(1);
+
+        scheduler.scheduleAtFixedRate(() -> {
+            for (UserAccount account : accounts)
+            {
+                if (account.getAccountType().equals("high yield interest") ||
+                    account.getAccountType().equals("lifetime isa"))
+                {
+                    ((InterestAccount) account).applyInterest();
+                }
+            }
+        
+            saveAccountsToFile();
+
+            System.out.println("Interest applied to eligible accounts.");
+        }, 0, 30, TimeUnit.SECONDS);
     }
 
     // method to save accounts to the file

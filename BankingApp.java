@@ -1,5 +1,7 @@
+// decimalformat is used to format the balance display
 // scanner is used to take the users input
 import java.text.DecimalFormat;
+import java.util.Scanner;
 
 // the main class that runs the banking app
 public class BankingApp
@@ -133,29 +135,72 @@ public class BankingApp
 
                 // allows the user to create a new account
                 case 2:
-                    // asks the user for the username of their account
                     System.out.print("Choose a username: ");
-                    // stores the input and saves it to userName
                     userName = scan.nextLine();
 
-                    // asks the user for the pin of their account
                     System.out.print("Choose a PIN: ");
-                    // stores the input and saves it to PIN
                     PIN = scan.nextInt();
+                    scan.nextLine();
 
-                    // a new account starts with an initial balance of £0.00
+                    int accountOption;
+                    String accountType = null;
                     double initialBalance = 0.00;
 
-                    // attempt to create the account with the information the user provided
-                    if(user.createAccount(userName, PIN, initialBalance))
+                    // account type selection loop
+                    do
                     {
-                        System.out.println("Account created successfully.");
-                    }
+                        System.out.println("\nAccount selection" +
+                                        "\n-----------------" +
+                                        "\n1 - Standard Account" +
+                                        "\n2 - Interest Account" +
+                                        "\n3 - ISA Account" +
+                                        "\n4 - Go Back");
+
+                        System.out.print("\nWhich type of account would you like to create? ");
+                        accountOption = scan.nextInt();
+
+                        switch (accountOption)
+                        {
+                            case 1:
+                                System.out.println("Standard Account selected.");
+                                accountType = "regular";
+                                break;
+
+                            case 2:
+                                System.out.println("Interest Account selected.");
+                                accountType = "interest";
+                                break;
+
+                            case 3:
+                                System.out.println("ISA Account selected.");
+                                accountType = "isa";
+                                break;
+
+                            case 4:
+                                System.out.println("Returning to Main Menu...");
+                                break;
+
+                            default:
+                                System.out.println("Invalid input, try again.");
+                                break;
+                        }
+                            
+                    } while(accountOption != 1 && accountOption != 2 && accountOption != 3 && accountOption != 4);
+
+                    if (accountOption == 4)
+                        break;
+
+                    // checks if the account has been created with its username, pin, initial balance, and account type
+                    if (user.createAccount(userName, PIN, initialBalance, accountType))
+                        {
+                            System.out.println("\nAccount created successfully.");
+                        }
+                    // if the account could not be created, shows an error message
                     else
-                    {
-                        System.out.println("Account already exists. Please try again.");
-                    }
-                    break;
+                        {
+                            System.out.println("\nAccount already exists.");
+                        }
+                        break;
 
                 // allows the user to delete their account
                 case 3:
@@ -165,16 +210,17 @@ public class BankingApp
                     
                     // asks the user for the pin of their account
                     System.out.print("Enter your PIN: ");
+                    // stores the input and saves it to PIN
                     PIN = scan.nextInt();
 
                     // attempt to delete the account with the information the user provided
                     if(user.deleteAccount(userName, PIN))
                     {
-                        System.out.println("Account deleted successfully.");
+                        System.out.println("\nAccount deleted successfully.");
                     }
                     else
                     {
-                        System.out.println("Invalid details. Please try again.");
+                        System.out.println("\nInvalid details. Please try again.");
                     }
                     break;
 
@@ -192,12 +238,13 @@ public class BankingApp
                 // handles invalid menu choices
                 default:
                     System.out.println("Invalid input, try again.");
-            }
+                    break;
+                }
 
-        // continues the main menu loop until the user chooses 4 to exit
-        }while(mainMenu != 4);
+            // continues the main menu loop until the user chooses 4 to exit
+            }while(mainMenu != 4);
 
-        // close the scanner to prevent resource leaks
-        scan.close();
+            // close the scanner to prevent resource leaks
+            scan.close();
     }
 }

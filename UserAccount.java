@@ -1,21 +1,27 @@
-public class UserAccount
+public abstract class UserAccount
 {
     // username for the account
-    private String username;
+    // made final so username cant be changed later in the code
+    private final String username;
 
     // pin for the account
-    private int pin;
+    // made final so pin cant be changed later in the code
+    private final int pin;
     
     // balance for the account
-    private double balance;
+    // does not need to be final as the balance will change with every transaction
+    protected double balance;
+
+    private final String accountType;
 
     // constructor to initialize the user account
-    public UserAccount(String username, int pin, double initialBalance)
+    public UserAccount(String username, int pin, double initialBalance, String accountType)
     {
         // set the username, pin, and initial balance
         this.username = username;
         this.pin = pin;
         this.balance = initialBalance;
+        this.accountType = accountType;
     }
 
     // getter methods for username
@@ -34,6 +40,11 @@ public class UserAccount
     public double getBalance()
     {
         return balance;
+    }
+
+    public String getAccountType()
+    {
+        return accountType;
     }
 
     // method to deposit funds into the account

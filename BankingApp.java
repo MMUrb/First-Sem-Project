@@ -1,6 +1,4 @@
 // scanner is used to take the users input
-import java.util.Scanner;
-// decimal format is used to format the balance to 2 decimal places and add commas to make the balance easier to read
 import java.text.DecimalFormat;
 
 // the main class that runs the banking app

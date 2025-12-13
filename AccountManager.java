@@ -2,14 +2,18 @@
 import java.io.*;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.concurrent.*;
-
 
 public class AccountManager
 {
     // create a decimal format object to display the balance with commas and 2 decimal places to show pence
     // so £3890123.5 becomes £3,890,123.50
-    DecimalFormat df = new DecimalFormat("#,###.00");
+    DecimalFormat df = new DecimalFormat("#,##0.00");
+
+    // method to get the decimal format object
+    public DecimalFormat getFormatter()
+    {
+        return df;
+    }
 
     // arraylist to store multiple user accounts, accounts can also be added or removed from the list
     // used final so accounts cant be changed later in the code
@@ -22,35 +26,55 @@ public class AccountManager
     
     // file path to store the account information
     // used final so FILE_PATH cant be changed later in the code
-    private final String FILE_PATH = "C:\\Users\\Rahul\\OneDrive - MMU\\Digital Artefact\\First Sem Project\\AccountInfo.txt";
+    private final String FILE_PATH = "AccountInfo.txt";
 
+    // constructor to initialize the account manager
     public AccountManager()
     {
         // load existing accounts from the file
         loadAccountsFromFile();
     }
 
-    public boolean createAccount(String username, int pin, double initialBalance, String accountType)
+    // allows for specific messages to be shown in BankingApp when creating an account
+    public enum createAccountResult
+    {
+        success,
+        invalidPin,
+        accountExists,
+        unknownError
+    }
+
+    // method to create a new account
+    public createAccountResult createAccount(String username, int pin, double initialBalance, String accountType)
     {
         // checks if the pin is a 4 digit number
         if (pin < 1000 || pin > 9999)
         {
-            return false;
+            return createAccountResult.invalidPin;
         }
         // checks if an account with the same username and pin already exists
         if (findAccount(username, pin) != null)
         {
             // if so, return false means, the account was not created
-            return false;
+            return createAccountResult.accountExists;
         }
 
+        try
+        {
+
+        // creates a specific account using the AccountFactory
         UserAccount newAccount = AccountFactory.create(username, pin, initialBalance, accountType);
         // adds a new user account to the accounts arraylist
         accounts.add(newAccount);   
         // saves the new data to the file
         saveAccountsToFile();
         // prints message shown in BankingApp
-        return true;
+        return createAccountResult.success;
+        }
+        catch (IllegalArgumentException e)
+        {
+            return createAccountResult.unknownError;
+        }
     }
 
     // method to login to an account
@@ -136,27 +160,7 @@ public class AccountManager
         // if they dont match, it returns nothing
         return null;
     }
-
-    public void interestTimer()
-    {
-        ScheduledExecutorService scheduler = java.util.concurrent.Executors.newScheduledThreadPool(1);
-
-        scheduler.scheduleAtFixedRate(() -> {
-            for (UserAccount account : accounts)
-            {
-                if (account.getAccountType().equals("high yield interest") ||
-                    account.getAccountType().equals("lifetime isa"))
-                {
-                    ((InterestAccount) account).applyInterest();
-                }
-            }
-        
-            saveAccountsToFile();
-
-            System.out.println("Interest applied to eligible accounts.");
-        }, 0, 30, TimeUnit.SECONDS);
-    }
-
+    
     // method to save accounts to the file
     protected void saveAccountsToFile()
     {

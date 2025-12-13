@@ -1,3 +1,1 @@
-a,1111,200.0,Standard
-b,2222,94462.94631326046,High Yield Interest
-c,3333,2.5949678889533874E7,Lifetime ISA
+r,1111,0.0,High Yield Interest

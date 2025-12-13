@@ -42,6 +42,7 @@ public abstract class UserAccount
         return balance;
     }
 
+    // getter method for account type
     public String getAccountType()
     {
         return accountType;
@@ -66,6 +67,7 @@ public abstract class UserAccount
         {
             // removes the amount entered from the balance
             balance -= amount;
+            
             // shows that the withdrawal was successful
             return true;
         }
